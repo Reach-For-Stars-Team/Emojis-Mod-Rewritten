@@ -17,7 +17,7 @@ namespace EmojisModRewritten;
 
 public static class EmojiLoader
 {
-    private static string _emojisPath = OperatingSystem.IsAndroid() ? Environment.GetEnvironmentVariable("STAR_DATA_PATH") : Paths.GameRootPath;
+    private static string _emojisPath = OperatingSystem.IsAndroid() || OperatingSystem.IsIOS() ? Environment.GetEnvironmentVariable("STAR_DATA_PATH") : Paths.GameRootPath;
     private static ManualLogSource _log = BepInEx.Logging.Logger.CreateLogSource("EmojiLoader");
     public static TMP_SpriteAsset SpriteAsset;
     public static void LoadEmojis()
