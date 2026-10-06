@@ -21,7 +21,11 @@
     
     <ItemGroup>
         <EmbeddedResource Include="Resources/*.bundle"/>
-        <EmbeddedResource Include="Resources/*.png"/>
+        <EmbeddedResource Include="Resources/**/*.png"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Resources\DefaultEmojis\Fault\" />
     </ItemGroup>
 
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
