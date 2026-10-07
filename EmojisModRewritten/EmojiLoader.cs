@@ -29,6 +29,14 @@ public static class EmojiLoader
     {
         var textures = new List<Texture2D>();
         LoadLocalEmojis(textures);
+        foreach (var r in RoleManager.Instance.AllRoles.ToArray())
+        {
+            if (r.RoleIconSolid)
+            {
+                textures.Add(r.RoleIconSolid.texture);
+            }
+        }
+
         SpriteAsset = TmpSpriteAssetBuilder.CreateTMPSpriteAsset(textures, "Emojis_Asset_TMP");
         yield break;
     }
