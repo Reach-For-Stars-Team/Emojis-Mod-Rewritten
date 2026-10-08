@@ -9,3 +9,7 @@ Afterwards, you must go to your among us install location, you should find an `E
 # Player-shaded emojis:
 The mod allows you to define emojis that show up in every player character color, to do so, you must name your file with the prefix `playershader_`!
 ![img.png](Images/playershader.png)
+
+# Credits:
+- [Fault](https://github.com/soyFault): Some default emojis featured in the mod.
+- [MiraAPI](https://github.com/All-Of-Us-Mods/MiraAPI/blob/master/MiraAPI/Utilities/Assets/SpriteTools.cs): Sprite loading code 

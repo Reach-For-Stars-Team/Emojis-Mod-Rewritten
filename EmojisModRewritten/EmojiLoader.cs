@@ -2,15 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using AmongUs.GameOptions;
+using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
 using EmojisModRewritten.Utilities;
 using Reactor.Utilities;
 using TMPro;
 using UnityEngine;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using Object = UnityEngine.Object;
 
 namespace EmojisModRewritten;
@@ -20,14 +18,18 @@ public static class EmojiLoader
     private static string _emojisPath = OperatingSystem.IsAndroid() || OperatingSystem.IsIOS() ? Environment.GetEnvironmentVariable("STAR_DATA_PATH") : Paths.GameRootPath;
     private static ManualLogSource _log = BepInEx.Logging.Logger.CreateLogSource("EmojiLoader");
     public static TMP_SpriteAsset SpriteAsset;
+    private static bool _initialized = false;
     public static void LoadEmojis()
     {
+        if (_initialized) return;
+        _initialized = true;
         Coroutines.Start(CoLoadEmojis());
     }
 
     private static IEnumerator CoLoadEmojis()
     {
         var textures = new List<Texture2D>();
+        LoadDefaultEmojis(textures);
         LoadLocalEmojis(textures);
         foreach (var r in RoleManager.Instance.AllRoles.ToArray())
         {
@@ -39,6 +41,22 @@ public static class EmojiLoader
 
         SpriteAsset = TmpSpriteAssetBuilder.CreateTMPSpriteAsset(textures, "Emojis_Asset_TMP");
         yield break;
+    }
+
+    private static void LoadDefaultEmojis(List<Texture2D> textures)
+    {
+        var asm = typeof(EmojisModRewrittenPlugin).Assembly;
+        foreach (var name in asm.GetManifestResourceNames())
+        {
+            if (name.StartsWith("EmojisModRewritten.Resources.DefaultEmojis") && name.EndsWith(".png"))
+            {
+                var tex = SpriteTools.LoadTextureFromResourcePath(name, asm);
+                tex.name = name.Replace("EmojisModRewritten.Resources.DefaultEmojis.", "");
+                tex.name = tex.name.Replace(".png", "");
+                tex.name = tex.name.ToLower();
+                textures.Add(tex);
+            }
+        }
     }
 
     private static void LoadLocalEmojis(List<Texture2D> textures)
