@@ -34,6 +34,12 @@ public class ChatPatches
             });
         button.transform.SetParent(__instance.freeChatField.transform);
         button.transform.localPosition = new Vector3(1.75f, 0, -10);
+        __instance.freeChatField.charCountText.gameObject.transform.localPosition = new Vector3(3.1f, 0.725f, 0);
+        __instance.freeChatField.charCountText.fontSize = 1.4f;
+        __instance.scroller.transform.localPosition = new Vector3(0, 0.25f, -1);
+        __instance.sendRateMessageText.transform.localPosition = new Vector3(-3.25f, -1, -5);
+        Object.Instantiate(EmojisModAssets.MarkdownMenuPrefab, __instance.chatScreen.transform);
+        Object.Instantiate(EmojisModAssets.EmojiSuggestionPrefab, __instance.chatScreen.transform);
     }
 
     [HarmonyPatch(typeof(ChatBubble), nameof(ChatBubble.SetText))]
@@ -43,7 +49,8 @@ public class ChatPatches
         if (EmojiLoader.SpriteAsset == null) return;
         __instance.TextArea.spriteAsset = __instance.TextArea.m_spriteAsset = EmojiLoader.SpriteAsset;
         __instance.TextArea.text = TextReplacementUtilities.ReformatForPlayerNames(chatText);
-        __instance.TextArea.text = TextReplacementUtilities.ReformatForEmojis(chatText);
+        __instance.TextArea.text = TextReplacementUtilities.ReformatForEmojis(__instance.TextArea.text);
+        __instance.TextArea.text = TextReplacementUtilities.ReformatForMarkdown(__instance.TextArea.text);
     }
 
     [HarmonyPatch(typeof(ChatBubble), nameof(ChatBubble.SetCosmetics))]
@@ -56,5 +63,12 @@ public class ChatPatches
             bubble.Initialize(__instance);
         }
         bubble.SetTimeStamp();
+    }
+    
+    [HarmonyPatch(typeof(TextBoxTMP), nameof(TextBoxTMP.IsCharAllowed))]
+    [HarmonyPostfix]
+    public static void TextBoxTMP_IsCharAllowed(TextBoxTMP __instance, ref char i, out bool __result)
+    {
+        __result = i.ToString() != "\b";
     }
 }

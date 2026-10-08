@@ -7,7 +7,7 @@ using Reactor.Utilities;
 
 namespace EmojisModRewritten;
 
-[BepInAutoPlugin("com.missingpixel.emojis", "Emojis Mod: Rewritten", "1.0.0")]
+[BepInAutoPlugin("com.missingpixel.emojis", "Emojis Mod: Rewritten", "1.1.0")]
 [BepInProcess("Among Us.exe")]
 [BepInDependency(ReactorPlugin.Id)]
 public partial class EmojisModRewrittenPlugin : BasePlugin

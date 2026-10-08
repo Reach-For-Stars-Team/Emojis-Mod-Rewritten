@@ -18,7 +18,7 @@ public static class TextReplacementUtilities
 
         return final;
     }
-
+    
     public static string ReformatForPlayerNames(string text)
     {
         var final = text;
