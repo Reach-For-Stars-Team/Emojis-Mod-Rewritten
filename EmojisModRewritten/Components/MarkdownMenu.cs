@@ -10,21 +10,38 @@ namespace EmojisModRewritten.Components;
 public class MarkdownMenu(IntPtr ptr) : MonoBehaviour(ptr)
 {
     private RectTransform _rectTransform;
-
+    private Canvas _canvas;
     private void Start()
     {
         _rectTransform = GetComponent<RectTransform>();
+        _canvas  = GetComponentInParent<Canvas>();
     }
 
     private void Update()
     {
         if (!HudManager.InstanceExists) return;
-        
-        var inputField = HudManager.Instance.Chat.freeChatField;
-        _rectTransform.sizeDelta = new Vector2(inputField.background.sprite.texture.width - 75, 50);
-        var chatScale = HudManager.Instance.Chat.chatScreen.transform.localScale;
-        _rectTransform.localScale = new Vector3(0.7375f * chatScale.x, 0.7375f * chatScale.y, 0.7375f * chatScale.z);
-        _rectTransform.position = HudManager.Instance.UICamera.WorldToScreenPoint(inputField.transform.position) + new Vector3(-35, 75, 0);
+
+        var field = HudManager.Instance.Chat.freeChatField;
+        var cam = HudManager.Instance.UICamera;
+        var bounds = field.background.bounds;
+
+        Vector2 min = cam.WorldToScreenPoint(bounds.min);
+        Vector2 max = cam.WorldToScreenPoint(bounds.max);
+        float fieldW = max.x - min.x;
+        float fieldH = max.y - min.y;
+
+        const float widthFraction  = 0.8f;
+        const float heightFraction = 0.75f;
+        const float gapFraction = 0.25f;
+
+        float s = _canvas.scaleFactor;
+
+        _rectTransform.sizeDelta = new Vector2(fieldW * widthFraction, fieldH * heightFraction) / s;
+        _rectTransform.pivot = Vector2.zero;
+        _rectTransform.position = new Vector3(
+            min.x + fieldW * (1f - widthFraction) * 0.5f,
+            max.y + fieldH * gapFraction,
+            0f);
     }
 
     public void OnClickBold()

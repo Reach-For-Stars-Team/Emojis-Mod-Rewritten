@@ -25,7 +25,6 @@ public class ChatPatches
                     __instance.freeChatField.textArea.AllowSymbols
                         = true;
         var menu = Object.Instantiate(EmojisModAssets.EmojisMenuPrefab, __instance.chatScreen.transform);
-        menu.gameObject.SetActive(false);
         var button = PassiveButtonUtilities.CreatePassiveButton("EmojiButton", EmojisModAssets.EmojiButtonSpriteActive, EmojisModAssets.EmojiButtonSprite, Vector2.one,
             () =>
             {
