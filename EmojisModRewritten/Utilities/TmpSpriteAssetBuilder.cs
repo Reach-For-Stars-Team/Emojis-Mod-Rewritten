@@ -14,6 +14,9 @@ public static class TmpSpriteAssetBuilder
     public static TMP_SpriteAsset CreateTMPSpriteAsset(IList<Texture2D> textures, string assetName,
         float scale = 1f, int padding = 2, int maxAtlasSize = 4096)
     {
+        var emptyTex = new Texture2D(2, 2).DontDestroy();
+        emptyTex.name = "empty";
+        textures.Insert(0, emptyTex);
         var atlas = new Texture2D(2, 2, TextureFormat.RGBA32, false)
         {
             name = assetName + " Atlas",

@@ -38,6 +38,7 @@ public class EmojiSuggestionMenu(IntPtr ptr) : MonoBehaviour(ptr)
         string searchTerm = text.Substring(searchStartIndex).Replace(":", "");
         foreach (var spr in EmojiLoader.SpriteAsset.spriteCharacterTable.ToArray().Where(x => x.name.Contains(searchTerm)).Take(6))
         {
+            if (spr.name == "empty") continue;
             var btn = Instantiate(SuggestionPrefab.Value, transform);
             Buttons.Add(btn);
             btn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = spr.name;

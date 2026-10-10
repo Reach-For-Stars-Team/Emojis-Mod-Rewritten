@@ -30,7 +30,7 @@ public class MarkdownMenu(IntPtr ptr) : MonoBehaviour(ptr)
         float fieldW = max.x - min.x;
         float fieldH = max.y - min.y;
 
-        const float widthFraction  = 1f;
+        const float widthFraction  = 0.8f;
         const float heightFraction = 0.75f;
         const float gapFraction = 0.25f;
 

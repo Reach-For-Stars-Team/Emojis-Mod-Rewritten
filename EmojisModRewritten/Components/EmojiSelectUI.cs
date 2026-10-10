@@ -35,6 +35,7 @@ public class EmojiSelectMenu(IntPtr ptr) : MonoBehaviour(ptr)
         commonlyUsedEmojisParent.Value.parent.gameObject.SetActive(false);
         foreach (var character in EmojiLoader.SpriteAsset.m_SpriteCharacterTable)
         {
+            if (character.name == "empty") continue;
             var button = Instantiate(emojiButtonPrefab.Value, emojisParent.Value);
             button.onClick = new Button.ButtonClickedEvent();
             button.onClick.AddListener(new System.Action(() => SelectEmoji(character.name)));
