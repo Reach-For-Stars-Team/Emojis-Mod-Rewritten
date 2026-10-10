@@ -17,6 +17,8 @@ public class EmojiSuggestionMenu(IntPtr ptr) : MonoBehaviour(ptr)
     public Il2CppReferenceField<Button> SuggestionPrefab;
     public List<Button> Buttons = new();
     private RectTransform _rectTransform;
+    private Canvas _canvas;
+
     public void Refresh()
     {
         foreach (var button in Buttons)
@@ -54,6 +56,7 @@ public class EmojiSuggestionMenu(IntPtr ptr) : MonoBehaviour(ptr)
     private void Start()
     {
         _rectTransform = GetComponent<RectTransform>();
+        _canvas = GetComponentInParent<Canvas>();
         HudManager.Instance.Chat.freeChatField.OnChangedEvent += new Action(Refresh);
         gameObject.SetActive(false);
     }
@@ -69,8 +72,28 @@ public class EmojiSuggestionMenu(IntPtr ptr) : MonoBehaviour(ptr)
 
     private void Update()
     {
-        var inputField = HudManager.Instance.Chat.freeChatField;
-        _rectTransform.sizeDelta = new Vector2(inputField.background.sprite.texture.width, inputField.background.sprite.texture.width / 2f);
-        _rectTransform.position = HudManager.Instance.UICamera.WorldToScreenPoint(inputField.transform.position) + new Vector3(0, 50, 0);
+        if (!HudManager.InstanceExists) return;
+
+        var field = HudManager.Instance.Chat.freeChatField;
+        var cam = HudManager.Instance.UICamera;
+        var bounds = field.background.bounds;
+
+        Vector2 min = cam.WorldToScreenPoint(bounds.min);
+        Vector2 max = cam.WorldToScreenPoint(bounds.max);
+        float fieldW = max.x - min.x;
+        float fieldH = max.y - min.y;
+
+        const float widthFraction  = 1f;
+        const float heightFraction = 0.75f;
+        const float gapFraction = 0.25f;
+
+        float s = _canvas.scaleFactor;
+
+        _rectTransform.sizeDelta = new Vector2(fieldW * widthFraction, fieldH * heightFraction) / s;
+        _rectTransform.pivot = Vector2.zero;
+        _rectTransform.position = new Vector3(
+            min.x + fieldW * (1f - widthFraction) * 0.5f,
+            max.y + fieldH * gapFraction,
+            0f);
     }
 }

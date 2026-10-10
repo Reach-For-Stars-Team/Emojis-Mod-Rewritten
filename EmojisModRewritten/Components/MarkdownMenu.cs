@@ -19,28 +19,29 @@ public class MarkdownMenu(IntPtr ptr) : MonoBehaviour(ptr)
 
     private void Update()
     {
-    if (!HudManager.InstanceExists) return;
+        if (!HudManager.InstanceExists) return;
 
-    var field = HudManager.Instance.Chat.freeChatField;
-    var cam = HudManager.Instance.UICamera;
-    var bounds = field.background.bounds; // world-space bounds
+        var field = HudManager.Instance.Chat.freeChatField;
+        var cam = HudManager.Instance.UICamera;
+        var bounds = field.background.bounds;
 
-    Vector2 min = cam.WorldToScreenPoint(bounds.min);
-    Vector2 max = cam.WorldToScreenPoint(bounds.max);
-    float fieldW = max.x - min.x;
-    float fieldH = max.y - min.y;
+        Vector2 min = cam.WorldToScreenPoint(bounds.min);
+        Vector2 max = cam.WorldToScreenPoint(bounds.max);
+        float fieldW = max.x - min.x;
+        float fieldH = max.y - min.y;
 
-    const float widthFraction  = 0.97f; // toolbar width relative to the field
-    const float heightFraction = 0.75f; // toolbar height relative to the field
-    const float gapFraction    = 1.4f;  // distance above the field's top edge
+        const float widthFraction  = 1f;
+        const float heightFraction = 0.75f;
+        const float gapFraction = 0.25f;
 
-    float s = _canvas.scaleFactor;
+        float s = _canvas.scaleFactor;
 
-    _rectTransform.sizeDelta = new Vector2(fieldW * widthFraction, fieldH * heightFraction) / s;
-    _rectTransform.position = new Vector3(
-        min.x + fieldW * (1f - widthFraction) * 0.5f,
-        max.y + fieldH * gapFraction,
-        0f);
+        _rectTransform.sizeDelta = new Vector2(fieldW * widthFraction, fieldH * heightFraction) / s;
+        _rectTransform.pivot = Vector2.zero;
+        _rectTransform.position = new Vector3(
+            min.x + fieldW * (1f - widthFraction) * 0.5f,
+            max.y + fieldH * gapFraction,
+            0f);
     }
 
     public void OnClickBold()
